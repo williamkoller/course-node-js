@@ -1,0 +1,24 @@
+version: "3"
+services: 
+  mongodb: 
+    image: mongo:3
+    restart: always
+    volumes: 
+      - ./data:/data/db
+    ports: 
+      - "27017:27017"  
+  api:     
+    image: node:12
+    working_dir: /usr/src/course-node-js
+    restart: always
+    command: bash -c "yarn install && yarn start"
+    environment: 
+      - MONGODB_URI=mongodb://mongodb:27017/course-node-js
+    volumes:  
+      - ./:/usr/src/course-node-js/
+      - ./package.json:/usr/src/course-node-js/package.json
+    ports: 
+      - "5050:5050"
+      - "9222:9222"
+    links: 
+      - mongodb 
